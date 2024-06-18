@@ -1,15 +1,35 @@
-import express from 'express'
+import express, {Request, Response} from 'express'
 import dotenv from 'dotenv'
 dotenv.config()
+import cors from 'cors'
+import {connectDB, disConnectDB } from './config/db';
 
-const port:any = process.env.PORT;
+const port:any = process.env.PORT || 8000;
 
-const app = express()        
+const app = express()
 
-app.get("/", (req, res) => {
+connectDB();
+
+app.use(cors({
+    origin: "*"
+}))
+
+app.get("/", (req: Request, res: Response) => {
     res.send("ok");
 })
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`Server listening on port ${port}`)
+})
+
+process.on('SIGTERM',() => {
+    server.close(() => {
+        disConnectDB();
+    })
+})
+
+process.on('SIGINT',() => {
+    server.close(() => {
+        disConnectDB();
+    })
 })
