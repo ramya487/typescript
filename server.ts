@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 import cors from 'cors'
 import {connectDB, disConnectDB } from './config/db';
+import {router as AuthRouter} from './routers/AuthRouter/router';
 
 const port:any = process.env.PORT || 8000;
 
@@ -13,6 +14,9 @@ connectDB();
 app.use(cors({
     origin: "*"
 }))
+app.use(express.json());
+
+app.use("/auth", AuthRouter);
 
 app.get("/", (req: Request, res: Response) => {
     res.send("ok");
