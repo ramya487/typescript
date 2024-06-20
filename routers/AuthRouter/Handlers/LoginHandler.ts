@@ -2,21 +2,23 @@ import { Request, Response } from "express";
 import User from "../../../models/userModel";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import generateResponse from "../../../utils/ResponseGenerator";
 
 const LoginHandler = async (req: Request, res: Response) => {
   const { email, passwd } = req.body;
   if (!email || !passwd)
-    res.status(400).json({ status: "Failed", message: "Invalid Credentials" });
+    generateResponse(400, "Failed", "Invalid Credentials", res);
 
   const existingUser: any = await User.findOne({ email });
 
   if (!existingUser)
-    res.status(400).json({ status: "Failed", message: "Invalid Credentials" });
+    generateResponse(400, "Failed", "Invalid Credentials", res);
+
 
   const status = await bcrypt.compare(passwd, existingUser.passwd);
 
   if (!status)
-    res.status(400).json({ status: "Failed", message: "Invalid Credentials" });
+    generateResponse(400, "Failed", "Invalid Credentials", res);
 
   let token;
   try {
@@ -29,7 +31,7 @@ const LoginHandler = async (req: Request, res: Response) => {
       process.env.JWT_SECRET! // !- tells the compiler that the variable is not null/undefined for sure
     );
   } catch (error) {
-    res.status(500).json({ status: "Failed", message: "Error" });
+    generateResponse(500, "Failed", "Error", res);
   }
 
   res
