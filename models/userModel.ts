@@ -9,7 +9,7 @@ interface TUser {
 const userSchema = new Schema<TUser>(
   {
     name: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true }, // make it unique
     passwd: { type: String, required: true },
   },
   { timestamps: true }
