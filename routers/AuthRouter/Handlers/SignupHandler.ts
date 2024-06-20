@@ -18,6 +18,6 @@ const SignupHandler = async (req: Request, res: Response) => {
 
   const newUser = await User.create({ name, email, passwd: newPass });
 
-  return generateResponse(201, "Success", "User Created Successfully", res);
+  return generateResponse(201, "Success", "User Created Successfully..Pls Proceed to Login", res);
 };
 export default SignupHandler;
