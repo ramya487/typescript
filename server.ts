@@ -1,9 +1,11 @@
-import express, {Request, Response} from 'express'
+import express, { Request, Response} from 'express'
 import dotenv from 'dotenv'
 dotenv.config()
 import cors from 'cors'
 import {connectDB, disConnectDB } from './config/db';
 import {router as AuthRouter} from './routers/AuthRouter/router';
+import cookieParser from 'cookie-parser';
+import AuthMiddleware from './middleware/AuthMiddleware';
 
 const port:any = process.env.PORT || 8000;
 
@@ -17,6 +19,7 @@ app.use(cors({
     methods: "*"
 }))
 app.use(express.json());
+app.use(cookieParser())
 
 app.use("/auth", AuthRouter);
 

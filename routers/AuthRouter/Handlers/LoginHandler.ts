@@ -12,16 +12,14 @@ const LoginHandler = async (req: Request, res: Response) => {
 
   const existingUser: any = await User.findOne({ email });
 
-
   if (!existingUser)
     return generateResponse(400, "Failed", "Invalid Credentials", res);
-
 
   const status = await bcrypt.compare(passwd, existingUser.passwd);
 
   if (!status)
     return generateResponse(400, "Failed", "Invalid Credentials", res);
-  
+
   let token;
   try {
     token = jwt.sign(
@@ -38,7 +36,11 @@ const LoginHandler = async (req: Request, res: Response) => {
 
   return res
     .status(200)
-    .cookie("token", token)
+    .cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    })
     .json({ status: "Success", message: "Login Successful" });
 };
 export default LoginHandler;
