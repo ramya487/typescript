@@ -4,8 +4,10 @@ const generateResponse = (
   statusCode: number,
   status: string,
   message: string,
-  res: Response
+  res: Response,
+  data?: any
 ) => {
+  if (data) return res.status(statusCode).json({ status, message, data });
   return res.status(statusCode).json({ status, message });
 };
 
