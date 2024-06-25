@@ -6,7 +6,6 @@ import { connectDB, disConnectDB } from "./config/db";
 import { router as AuthRouter } from "./routers/AuthRouter/router";
 import { router as ChatRouter } from "./routers/ChatRouter/router";
 import cookieParser from "cookie-parser";
-import AuthMiddleware from "./middleware/AuthMiddleware";
 
 const port: any = process.env.PORT || 8000;
 
@@ -16,7 +15,7 @@ connectDB();
 
 app.use(
   cors({
-    origin: ["*", "http://localhost:3000"],
+    origin: ["*", "http://localhost:3000", "http://localhost:8000"],
     credentials: true,
     methods: "*",
   })
@@ -25,7 +24,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/auth", AuthRouter);
-app.use("/chat",AuthMiddleware, ChatRouter);
+app.use("/chat", ChatRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("ok");
