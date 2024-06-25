@@ -13,9 +13,11 @@ const app = express();
 
 connectDB();
 
+const whitelisted = ["*", process.env.FRONTEND_URL as string];
+
 app.use(
   cors({
-    origin: ["*", "http://localhost:3000", "http://localhost:8000"],
+    origin: whitelisted,
     credentials: true,
     methods: "*",
   })
