@@ -19,6 +19,9 @@ const RenameGroupHandler = async (req: Request, res: Response) => {
       }
     );
 
+    if (!renamedChat)
+      return generateResponse(500, "Failed", "Chat not found", res);
+
     return generateResponse(201, "Success", "Update Success", res);
   } catch (error) {
     return generateResponse(500, "Failed", "Error", res);
