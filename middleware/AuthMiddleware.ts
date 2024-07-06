@@ -17,7 +17,8 @@ declare global {
 }
 
 const AuthMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.cookies["token"];
+  const token = req.cookies["token"]; 
+  // note: cookies shall be received on the backend only when send from a client component on the frontend
 
   if (!token) {
     return generateResponse(401, "Failed", "UnAuthorised", res);
