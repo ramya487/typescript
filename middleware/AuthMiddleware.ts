@@ -20,13 +20,13 @@ const AuthMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies["token"];
 
   if (!token) {
-    return generateResponse(401, "UnAuthorised", "Not Authenticated", res);
+    return generateResponse(401, "Failed", "UnAuthorised", res);
   }
   let decoded: JwtPayload;
   try {
     decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
   } catch (error: any) {
-    return generateResponse(401, "UnAuthorised", "Not Authenticated", res);
+    return generateResponse(401, "Failed", "UnAuthorised", res);
   }
   req.session = {
     username: decoded.username,
