@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import User from "../../../models/userModel";
 import generateResponse from "../../../utils/ResponseGenerator";
 
-const GetAllUsersHandler = async (req: Request, res: Response) => {
+const SearchUserHandler = async (req: Request, res: Response) => {
   try {
     const allUsers: Array<any> = await User.find({
       _id: { $ne: req.session.id },
@@ -21,4 +21,4 @@ const GetAllUsersHandler = async (req: Request, res: Response) => {
   }
 };
 
-export default GetAllUsersHandler;
+export default SearchUserHandler;

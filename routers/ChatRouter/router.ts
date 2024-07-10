@@ -1,5 +1,5 @@
 import { Router } from "express";
-import GetAllUsersHandler from "./Handlers/GetAllUsersHandler";
+import SearchUserHandler from "./Handlers/SearchUserHandler";
 import GetChatIdHandler from "./Handlers/GetChatIdHandler";
 import CreateChatHandler from "./Handlers/CreateChatHandler";
 import AuthMiddleware from "../../middleware/AuthMiddleware";
@@ -11,7 +11,7 @@ import RemoveFromGroupHandler from "./Handlers/RemoveFromGroup";
 
 export const router = Router();
 
-router.get("/allusers",AuthMiddleware ,GetAllUsersHandler);
+router.get("/searchuser",AuthMiddleware ,SearchUserHandler);
 router.post("/chatid", AuthMiddleware, GetChatIdHandler);
 router.post("/createchat", CreateChatHandler);
 router.get("/fetchchats", AuthMiddleware, FetchChatsHandler);
