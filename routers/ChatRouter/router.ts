@@ -11,7 +11,7 @@ import RemoveFromGroupHandler from "./Handlers/RemoveFromGroup";
 
 export const router = Router();
 
-router.get("/searchuser",AuthMiddleware ,SearchUserHandler);
+router.get("/searchuser/:user",AuthMiddleware ,SearchUserHandler);
 router.post("/chatid", AuthMiddleware, GetChatIdHandler);
 router.post("/createchat", CreateChatHandler);
 router.get("/fetchchats", AuthMiddleware, FetchChatsHandler);
