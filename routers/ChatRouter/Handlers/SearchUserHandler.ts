@@ -14,10 +14,10 @@ const SearchUserHandler = async (req: Request, res: Response) => {
       { name: { $regex: user, $options: "i" } },
       { email: { $regex: user, $options: "i" } },
     ],
-  }
-  
+  };
+
   try {
-    const allUsers: Array<any> = await User.find(options).find({
+    const allUsers: Array<any> = await User.find(options, {passwd: 0}).find({
       _id: { $ne: req.session.id },
     });
 
