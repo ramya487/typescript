@@ -26,7 +26,7 @@ const LoginHandler = async (req: Request, res: Response) => {
       {
         id: existingUser._id,
         email: existingUser.email,
-        username: existingUser.username,
+        username: existingUser.name,
       },
       process.env.JWT_SECRET! // !- tells the compiler that the variable is not null/undefined for sure
     );
