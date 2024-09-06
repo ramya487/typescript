@@ -3,10 +3,26 @@ import User from "../../../models/userModel";
 import generateResponse from "../../../utils/ResponseGenerator";
 
 const SearchUserHandler = async (req: Request, res: Response) => {
-  const user = req.params.user;
+  const user = req.query.user;
 
   if (!user || user == "") {
-    generateResponse(400, "Failed", "User name required", res);
+    try {
+      const allUsers: Array<any> = await User.find(
+        { _id: { $ne: req.session.id } },
+        { passwd: 0 }
+      );
+
+      return generateResponse(
+        200,
+        "Success",
+        "Users fetched successfully",
+        res,
+        allUsers
+      );
+
+    } catch (error: any) {
+      return generateResponse(500, "Failed", "Could not get Users", res);
+    }
   }
 
   const options = {
@@ -17,7 +33,7 @@ const SearchUserHandler = async (req: Request, res: Response) => {
   };
 
   try {
-    const allUsers: Array<any> = await User.find(options, {passwd: 0}).find({
+    const allUsers: Array<any> = await User.find(options, { passwd: 0 }).find({
       _id: { $ne: req.session.id },
     });
 
@@ -29,7 +45,6 @@ const SearchUserHandler = async (req: Request, res: Response) => {
       allUsers
     );
   } catch (error: any) {
-    console.log(error);
     return generateResponse(500, "Failed", "Could not get Users", res);
   }
 };
