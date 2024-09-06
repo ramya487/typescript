@@ -5,6 +5,7 @@ import cors from "cors";
 import { connectDB, disConnectDB } from "./config/db";
 import { router as AuthRouter } from "./routers/AuthRouter/router";
 import { router as ChatRouter } from "./routers/ChatRouter/router";
+import { router as UserRouter } from "./routers/UserRouter/router";
 import cookieParser from "cookie-parser";
 
 const port: any = process.env.PORT || 8000;
@@ -27,6 +28,7 @@ app.use(cookieParser());
 
 app.use("/auth", AuthRouter);
 app.use("/chat", ChatRouter);
+app.use("/user", UserRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("ok");
