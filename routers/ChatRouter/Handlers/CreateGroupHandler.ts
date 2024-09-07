@@ -8,15 +8,13 @@ const CreateGroupHandler = async (req: Request, res: Response) => {
   if (!name || !users)
     return generateResponse(400, "Failed", "Invalid credentials", res);
 
-  var usersArray = JSON.parse(users);
-
-  if (usersArray.length < 2)
+  if (users.length < 2)
     return generateResponse(400, "Failed", "Require min 2 users", res);
 
   const newGroup = {
     chatName: name,
     isGroupChat: true,
-    users: [...usersArray, req.session.id],
+    users: [...users, req.session.id],
     groupAdmin: req.session.id,
   };
 
