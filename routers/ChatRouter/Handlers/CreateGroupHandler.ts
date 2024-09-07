@@ -19,9 +19,9 @@ const CreateGroupHandler = async (req: Request, res: Response) => {
   };
 
   try {
-    const groupChat = await Chat.create(newGroup);
+    const groupChat = await (await (await Chat.create(newGroup)).populate('users', '-passwd')).populate('groupAdmin', '-passwd');
 
-    return generateResponse(201, "Success", "Group chat created", res);
+    return generateResponse(201, "Success", "Group chat created", res, groupChat);
   } catch (error: any) {
     console.log(error);
     return generateResponse(500, "Failed", "Error creating group chat", res);
