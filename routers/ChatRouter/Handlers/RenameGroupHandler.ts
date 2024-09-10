@@ -17,12 +17,12 @@ const RenameGroupHandler = async (req: Request, res: Response) => {
       {
         new: true, // to return updated chat
       }
-    );
+    ).populate('groupAdmin', '-passwd').populate('users', '-passwd');
 
     if (!renamedChat)
       return generateResponse(500, "Failed", "Chat not found", res);
 
-    return generateResponse(201, "Success", "Update Success", res);
+    return generateResponse(201, "Success", "Update Success", res, renamedChat);
   } catch (error) {
     return generateResponse(500, "Failed", "Error", res);
   }
