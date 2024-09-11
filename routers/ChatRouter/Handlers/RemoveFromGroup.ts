@@ -17,13 +17,20 @@ const RemoveFromGroupHandler = async (req: Request, res: Response) => {
       {
         new: true, // to return updated chat
       }
-    );
+    )
+      .populate("users", "-passwd")
+      .populate("groupAdmin", "-passwd");
 
     if (!updatedChat)
       return generateResponse(500, "Failed", "Chat not found", res);
 
-    return generateResponse(201,"Success","User removed from group successfully",res, updatedChat);
-
+    return generateResponse(
+      201,
+      "Success",
+      "User removed from group successfully",
+      res,
+      updatedChat
+    );
   } catch (error) {
     return generateResponse(500, "Failed", "Error", res);
   }
