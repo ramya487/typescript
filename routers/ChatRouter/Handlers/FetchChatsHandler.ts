@@ -6,9 +6,17 @@ const FetchChatsHandler = async (req: Request, res: Response) => {
   try {
     const userChats = await Chat.find({
       users: { $elemMatch: { $eq: req.session.id } },
-    }).populate('users', '-passwd');
+    })
+      .populate("users", "-passwd")
+      .populate("groupAdmin", "-passwd");
 
-    return generateResponse(200, "Success", "Chats fetched successfully", res, userChats);
+    return generateResponse(
+      200,
+      "Success",
+      "Chats fetched successfully",
+      res,
+      userChats
+    );
   } catch (error) {
     return generateResponse(500, "Failed", "Error fetching chats", res);
   }

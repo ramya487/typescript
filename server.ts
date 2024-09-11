@@ -20,7 +20,7 @@ app.use(
   cors({
     origin: whitelisted,
     credentials: true,
-    methods: "*",
+    methods: ["*", "GET", "POST", "PUT", "PATCH", "DELETE"],
   })
 );
 app.use(express.json());
