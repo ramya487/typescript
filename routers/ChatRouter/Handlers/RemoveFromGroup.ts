@@ -15,14 +15,14 @@ const RemoveFromGroupHandler = async (req: Request, res: Response) => {
         $pull: { users: userId },
       },
       {
-        new: true,
+        new: true, // to return updated chat
       }
     );
 
     if (!updatedChat)
       return generateResponse(500, "Failed", "Chat not found", res);
 
-    return generateResponse(201,"Success","User removed from group successfully",res);
+    return generateResponse(201,"Success","User removed from group successfully",res, updatedChat);
 
   } catch (error) {
     return generateResponse(500, "Failed", "Error", res);
