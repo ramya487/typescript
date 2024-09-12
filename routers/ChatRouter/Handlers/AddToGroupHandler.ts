@@ -3,26 +3,34 @@ import generateResponse from "../../../utils/ResponseGenerator";
 import Chat from "../../../models/chatModel";
 
 const AddToGroupHandler = async (req: Request, res: Response) => {
-  const { chatId, userId } = req.body;
+  var { chatId, userIds } = req.body;
 
-  if (!chatId || !userId)
+  if (!chatId || userIds.length <= 0)
     return generateResponse(400, "Failed", "Invalid Credentials", res);
 
   try {
     const updatedChat = await Chat.findByIdAndUpdate(
       chatId,
       {
-        $push: { users: userId },
+        $push: { users: { $each: userIds } },
       },
       {
         new: true,
       }
-    );
+    )
+      .populate("users", "-passwd")
+      .populate("groupAdmin", "-passwd");
 
     if (!updatedChat)
       return generateResponse(500, "Failed", "Chat not found", res);
 
-    return generateResponse(201, "Success", "User added to group", res);
+    return generateResponse(
+      201,
+      "Success",
+      "User added to group",
+      res,
+      updatedChat
+    );
   } catch (error) {
     return generateResponse(500, "Failed", "Error", res);
   }
