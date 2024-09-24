@@ -16,7 +16,7 @@ const CreateChatHandler = async (req: Request, res: Response) => {
       users: [req.session.id, id],
     };
 
-    const createdChat = await Chat.create(newChat);
+    const createdChat = await (await Chat.create(newChat)).populate("users", "-passwd");
 
     return generateResponse(201, "Success", "Chat Created Successfully", res, createdChat);
   } catch (error: any) {
