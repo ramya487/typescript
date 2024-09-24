@@ -18,9 +18,9 @@ const CreateChatHandler = async (req: Request, res: Response) => {
 
     const createdChat = await Chat.create(newChat);
 
-    res.status(201).send(createdChat);
+    return generateResponse(201, "Success", "Chat Created Successfully", res, createdChat);
   } catch (error: any) {
-    res.status(500).send("Error");
+    return generateResponse(500, "Failed", "Error", res);
   }
 };
 
