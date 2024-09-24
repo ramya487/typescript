@@ -6,6 +6,7 @@ import { connectDB, disConnectDB } from "./config/db";
 import { router as AuthRouter } from "./routers/AuthRouter/router";
 import { router as ChatRouter } from "./routers/ChatRouter/router";
 import { router as UserRouter } from "./routers/UserRouter/router";
+import { router as MessageRouter } from "./routers/MessageRouter/router";
 import cookieParser from "cookie-parser";
 
 const port: any = process.env.PORT || 8000;
@@ -29,6 +30,7 @@ app.use(cookieParser());
 app.use("/auth", AuthRouter);
 app.use("/chat", ChatRouter);
 app.use("/user", UserRouter);
+app.use("/message", MessageRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("ok");

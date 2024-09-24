@@ -13,9 +13,9 @@ export const router = Router();
 
 router.get("/searchuser/",AuthMiddleware ,SearchUserHandler);
 router.post("/chatid", AuthMiddleware, GetChatIdHandler);
-router.post("/createchat", CreateChatHandler);
+router.post("/createchat", AuthMiddleware, CreateChatHandler);
 router.get("/fetchchats", AuthMiddleware, FetchChatsHandler);
 router.post("/creategroup", AuthMiddleware, CreateGroupHandler);
 router.put("/renamegroup", AuthMiddleware, RenameGroupHandler);
-router.put("/addtogroup", AuthMiddleware, AddToGroupHandler); // single user
+router.put("/addtogroup", AuthMiddleware, AddToGroupHandler); // multi user
 router.put("/removefromgroup", AuthMiddleware, RemoveFromGroupHandler);
