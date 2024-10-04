@@ -13,7 +13,7 @@ const FetchChatsHandler = async (req: Request, res: Response) => {
     return generateResponse(
       200,
       "Success",
-      "Chats fetched successfully",
+      "Chats fetched successfully", 
       res,
       userChats
     );

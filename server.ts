@@ -15,13 +15,13 @@ const app = express();
 
 connectDB();
 
-const whitelisted = ["*", process.env.FRONTEND_URL as string];
+const whitelisted = [process.env.FRONTEND_URL as string];
 
 app.use(
   cors({
     origin: whitelisted,
     credentials: true,
-    methods: ["*", "GET", "POST", "PUT", "PATCH", "DELETE"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   })
 );
 app.use(express.json());
