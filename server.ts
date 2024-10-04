@@ -9,13 +9,21 @@ import { router as UserRouter } from "./routers/UserRouter/router";
 import { router as MessageRouter } from "./routers/MessageRouter/router";
 import cookieParser from "cookie-parser";
 
+import { createServer } from "http";
+import { Server } from "socket.io";
+
 const port: any = process.env.PORT || 8000;
+const whitelisted = [process.env.FRONTEND_URL as string];
 
 const app = express();
+const server = createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: whitelisted,
+  },
+});
 
 connectDB();
-
-const whitelisted = [process.env.FRONTEND_URL as string];
 
 app.use(
   cors({
@@ -36,7 +44,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("ok");
 });
 
-const server = app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
 
