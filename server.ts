@@ -44,9 +44,18 @@ app.get("/", (req: Request, res: Response) => {
   res.send("ok");
 });
 
+io.on("connection", (socket) => {
+  console.log("User with id: ",socket.id,"connected!!");
+
+  socket.on("createUserRoom", (params) => {
+    socket.join(params.user.id);
+  })
+});
+
 server.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
+
 
 process.on("SIGTERM", () => {
   server.close(() => {
