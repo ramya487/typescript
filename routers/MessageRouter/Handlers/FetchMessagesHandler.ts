@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import generateResponse from "../../../utils/ResponseGenerator";
-import Chat from "../../../models/chatModel";
 import Message from "../../../models/messageModel";
 
 const FetchMessagesHandler = async (req: Request, res: Response) => {
@@ -10,7 +9,8 @@ const FetchMessagesHandler = async (req: Request, res: Response) => {
     return generateResponse(400, "Failed", "Invalid Credentials", res);
 
   try {
-    const response = await Message.find({ chat: chatId }); // check if required to populate
+    var response = await Message.find({ chat: chatId }).populate("chat").populate("sender", "-passwd"); // check if required to populate users, groupAdmin
+
     return generateResponse(200, "Success", "Messages fetched successfully", res, response);
 
   } catch (error) {
