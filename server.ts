@@ -45,17 +45,24 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 io.on("connection", (socket) => {
-  console.log("User with id: ",socket.id,"connected!!");
+  console.log("User with id: ", socket.id, "connected!!"); // note when the ws connection fails and is reinstantiated the id changes every time even for the same user
 
-  socket.on("createUserRoom", (params) => {
-    socket.join(params.user.id);
-  })
+  socket.on("createUserRoom", (profile) => {
+    socket.join(profile.id);
+  });
+
+  socket.on("newMessage", (newMessageObject) => {
+    const chat = newMessageObject.chat;
+    chat.users.forEach((userId: string) => {
+      if (userId == newMessageObject.sender._id) return;
+      socket.in(userId).emit("messageReceived", newMessageObject);
+    });
+  });
 });
 
 server.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
-
 
 process.on("SIGTERM", () => {
   server.close(() => {
