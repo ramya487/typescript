@@ -9,19 +9,27 @@ import { router as UserRouter } from "./routers/UserRouter/router";
 import { router as MessageRouter } from "./routers/MessageRouter/router";
 import cookieParser from "cookie-parser";
 
+import { createServer } from "http";
+import { Server } from "socket.io";
+
 const port: any = process.env.PORT || 8000;
+const whitelisted = [process.env.FRONTEND_URL as string];
 
 const app = express();
+const server = createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: whitelisted,
+  },
+});
 
 connectDB();
-
-const whitelisted = ["*", process.env.FRONTEND_URL as string];
 
 app.use(
   cors({
     origin: whitelisted,
     credentials: true,
-    methods: ["*", "GET", "POST", "PUT", "PATCH", "DELETE"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   })
 );
 app.use(express.json());
@@ -36,7 +44,23 @@ app.get("/", (req: Request, res: Response) => {
   res.send("ok");
 });
 
-const server = app.listen(port, () => {
+io.on("connection", (socket) => {
+  console.log("User with id: ", socket.id, "connected!!"); // note when the ws connection fails and is reinstantiated the id changes every time even for the same user
+
+  socket.on("createUserRoom", (profile) => {
+    socket.join(profile.id);
+  });
+
+  socket.on("newMessage", (newMessageObject) => {
+    const chat = newMessageObject.chat;
+    chat.users.forEach((userId: string) => {
+      if (userId == newMessageObject.sender._id) return;
+      socket.in(userId).emit("messageReceived", newMessageObject);
+    });
+  });
+});
+
+server.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
 

@@ -20,15 +20,16 @@ const SendMessageHandler = async (req: Request, res: Response) => {
       await (await Message.create(newMessage)).populate("chat")
     ).populate("sender", "-passwd");
 
+    // check if required to populate these
     // users array, groupAdmin in chat property are not direct keys in the response thus the following method is used to populate
-    response = await User.populate(response, {
-      path: "chat.users",
-      select: "-passwd",
-    });
-    response = await User.populate(response, {
-      path: "chat.groupAdmin",
-      select: "-passwd",
-    });
+    // response = await User.populate(response, {
+    //   path: "chat.users",
+    //   select: "-passwd",
+    // });
+    // response = await User.populate(response, {
+    //   path: "chat.groupAdmin",
+    //   select: "-passwd",
+    // });
 
     return generateResponse(201, "Success", "Message Created Successfully", res, response);
   } catch (error) {
