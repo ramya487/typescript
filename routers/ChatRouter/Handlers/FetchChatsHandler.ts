@@ -4,16 +4,22 @@ import generateResponse from "../../../utils/ResponseGenerator";
 
 const FetchChatsHandler = async (req: Request, res: Response) => {
   try {
-    const userChats = await Chat.find({
+    var userChats = await Chat.find({
       users: { $elemMatch: { $eq: req.session.id } },
     })
       .populate("users", "-passwd")
-      .populate("groupAdmin", "-passwd");
+      .populate("groupAdmin", "-passwd")
+      .populate("latestMessage");
+
+      userChats = await Chat.populate(userChats, {
+        path: "latestMessage.sender",
+        select: "-passwd"
+      })
 
     return generateResponse(
       200,
       "Success",
-      "Chats fetched successfully", 
+      "Chats fetched successfully",
       res,
       userChats
     );

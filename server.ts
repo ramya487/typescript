@@ -7,6 +7,7 @@ import { router as AuthRouter } from "./routers/AuthRouter/router";
 import { router as ChatRouter } from "./routers/ChatRouter/router";
 import { router as UserRouter } from "./routers/UserRouter/router";
 import { router as MessageRouter } from "./routers/MessageRouter/router";
+import { router as UploadRouter } from "./routers/UploadRouter/router";
 import cookieParser from "cookie-parser";
 
 import { createServer } from "http";
@@ -39,6 +40,7 @@ app.use("/auth", AuthRouter);
 app.use("/chat", ChatRouter);
 app.use("/user", UserRouter);
 app.use("/message", MessageRouter);
+app.use("/upload", UploadRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("ok");
@@ -56,6 +58,23 @@ io.on("connection", (socket) => {
     chat.users.forEach((userId: string) => {
       if (userId == newMessageObject.sender._id) return;
       socket.in(userId).emit("messageReceived", newMessageObject);
+    });
+  });
+
+  socket.on("sendChat", (chatObject, profileId) => {
+    // for individual and group chat creations
+    const users = chatObject.users;
+    users.forEach((userObject: any) => {
+      if (userObject._id == profileId) return;
+      socket.in(userObject._id).emit("newChat", chatObject);
+    });
+  });
+
+  socket.on("latestMsgUpdate", (updatedChatObject) => {
+    const chat = updatedChatObject.users;
+    chat.forEach((userObject: any) => {
+      if (userObject._id == updatedChatObject.latestMessage.sender) return;
+      socket.in(userObject._id).emit("latestMsgUpdateFrnt", updatedChatObject);
     });
   });
 });

@@ -14,7 +14,6 @@ const FetchMessagesHandler = async (req: Request, res: Response) => {
     return generateResponse(200, "Success", "Messages fetched successfully", res, response);
 
   } catch (error) {
-    console.log(error);
     return generateResponse(500, "Failed", "Error", res);
   }
 };
