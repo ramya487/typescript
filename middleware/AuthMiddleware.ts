@@ -6,6 +6,7 @@ interface SessionType {
   username: string;
   email: string;
   id: string;
+  pic: string;
 }
 
 declare global {
@@ -33,6 +34,7 @@ const AuthMiddleware = (req: Request, res: Response, next: NextFunction) => {
     username: decoded.username,
     email: decoded.email,
     id: decoded.id,
+    pic: decoded.pic
   };
   next();
 };
