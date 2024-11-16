@@ -11,7 +11,7 @@ const UploadImageHandler = async (req: Request, res: Response) => {
     return generateResponse(500, "Failed", "Error Image Update", res);
   }
   try {
-    const fileBase64 = decode(file.buffer.toString("base64"));
+    const fileBase64 = decode(file.buffer.toString("base64")); 
 
     const { data, error } = await supabase.storage
       .from("profile_images")
