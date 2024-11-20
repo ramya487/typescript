@@ -9,7 +9,7 @@ const RenameGroupHandler = async (req: Request, res: Response) => {
     return generateResponse(400, "Failed", "Invalid credentials", res);
 
   try {
-    const renamedChat = await Chat.findByIdAndUpdate(
+    var renamedChat = await Chat.findByIdAndUpdate(
       chatId,
       {
         chatName,
@@ -17,7 +17,12 @@ const RenameGroupHandler = async (req: Request, res: Response) => {
       {
         new: true, // to return updated chat
       }
-    ).populate('groupAdmin', '-passwd').populate('users', '-passwd');
+    ).populate('groupAdmin', '-passwd').populate('users', '-passwd').populate("latestMessage");
+
+    renamedChat = await Chat.populate(renamedChat, {
+      path: "latestMessage.sender",
+      select: "-passwd"
+    })
 
     if (!renamedChat)
       return generateResponse(500, "Failed", "Chat not found", res);

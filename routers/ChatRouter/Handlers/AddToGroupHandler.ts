@@ -9,7 +9,7 @@ const AddToGroupHandler = async (req: Request, res: Response) => {
     return generateResponse(400, "Failed", "Invalid Credentials", res);
 
   try {
-    const updatedChat = await Chat.findByIdAndUpdate(
+    var updatedChat = await Chat.findByIdAndUpdate(
       chatId,
       {
         $push: { users: { $each: userIds } },
@@ -19,7 +19,13 @@ const AddToGroupHandler = async (req: Request, res: Response) => {
       }
     )
       .populate("users", "-passwd")
-      .populate("groupAdmin", "-passwd");
+      .populate("groupAdmin", "-passwd")
+      .populate("latestMessage");
+
+      updatedChat = await Chat.populate(updatedChat, {
+        path: "latestMessage.sender",
+        select: "-passwd"
+      })
 
     if (!updatedChat)
       return generateResponse(500, "Failed", "Chat not found", res);
