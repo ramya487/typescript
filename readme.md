@@ -1,4 +1,4 @@
-# Chat Application Frontend
+# Chat Application Backend
 
 # Steps to Set up the Development Server
 
